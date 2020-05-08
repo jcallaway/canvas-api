@@ -11,6 +11,7 @@ import edu.ksu.canvas.model.assignment.Submission;
 import edu.ksu.canvas.net.Response;
 import edu.ksu.canvas.net.RestClient;
 import edu.ksu.canvas.oauth.OauthToken;
+import edu.ksu.canvas.requestOptions.ListSubmissionOptions;
 import edu.ksu.canvas.requestOptions.MultipleSubmissionsOptions;
 import org.apache.log4j.Logger;
 
@@ -38,6 +39,13 @@ public class SubmissionImpl extends BaseImpl<Submission, SubmissionReader, Submi
                           int connectTimeout, int readTimeout, Integer paginationPageSize, Boolean serializeNulls) {
         super(canvasBaseUrl, apiVersion, oauthToken, restClient, connectTimeout, readTimeout,
                 paginationPageSize, serializeNulls);
+    }
+
+    @Override
+    public List<Submission> listCourseSubmissionsForUser(ListSubmissionOptions options) throws IOException {
+        String url = buildCanvasUrl(String.format("courses/%s/students/submissions", options.getCourseId()),
+                options.getOptionsMap());
+        return getListFromCanvas(url);
     }
 
     @Override
